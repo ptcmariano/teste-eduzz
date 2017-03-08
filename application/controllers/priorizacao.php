@@ -24,6 +24,20 @@ class Priorizacao extends MY_Controller {
 		$this->load->view('_layout', $data);
 	}
 
+	
+	public function automatica()
+	{
+		$this->load->model('projetos_model');
+		$projetos = $this->projetos_model->get_byfilter($this->input->get('nome'));
+		$data = array(
+			'page'=>'priorizacao/automatica',
+			'title'=>'Priorização',
+			'subtitle'=>'Selecione um projeto para prioriza-lo manual ou automaticamente',
+			'projetos'=>$projetos
+		);
+		$this->load->view('_layout', $data);
+	}
+	
 	public function validator_nome($str)
 	{
 		if(trim($str) == ''){
