@@ -119,6 +119,9 @@
                   <li <?= $this->uri->segment(1) == "projetos" ? "class='active'" : "" ?>>
                     <a href="<?=base_url() . 'projetos'  ?>"><i class="icon mdi mdi-delicious"></i><span>Projetos</span></a>
                   </li>
+                  <li <?= $this->uri->segment(1) == "priorizacao" ? "class='active'" : "" ?>>
+                    <a href="<?=base_url() . 'priorizacao'  ?>"><i class="icon mdi mdi-delicious"></i><span>Priorização</span></a>
+                  </li>
                   <!--
 
                       - Estrutura para menus com submenus:
