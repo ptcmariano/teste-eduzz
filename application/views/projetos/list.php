@@ -46,7 +46,7 @@
 						<?php } ?>
 					</tbody>
 				</table>
-			</div>
+			</div><!-- panel-body -->
 		</div>	
 	</div>
 </div>
