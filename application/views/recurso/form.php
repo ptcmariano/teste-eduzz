@@ -35,10 +35,34 @@
             <div class="form-group">
               <label class="col-sm-3 control-label">Email</label>
               <div class="col-sm-6">                
-                <input type="text" class="form-control" name="email"
+                <input type="email" class="form-control" name="email"
                 value="<?= !empty($_POST) ? $this->input->post('email') : (!empty($record) ? $record->rcs_email : '') ?>" maxlength="100">
               </div>
             </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Conhecimento</label>
+              <div class="col-sm-4">
+                <select class="form-control" id="selectconhecimento">
+                  <option value="">Selecione conhecimento</option>
+                  <option value="front">front-end</option>
+                  <option value="back">backend</option>
+                  <option value="test">testes</option>
+                  <option value="devops">devops</option>
+                </select>
+              </div>
+              <div class="col-sm-2">
+              <button class="form-control" onclick="addconhecimento(event)">Adicionar</button>
+              </div>
+            </div>
+          <div class="col-sm-6 col-sm-offset-3">
+            <table id="tconhecimentolist" class="table">
+              <thead>
+              <th>Conhecimento</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
 
             <div class="row">
               <div class="col-xs-6"></div>
@@ -49,10 +73,21 @@
                 </p>
               </div>
             </div>
-
           </form>
         </div>
       </div>
-
   </div>
 </div>
+
+<script>
+window.onload = function(){
+  window.addconhecimento = function(ev){
+    ev.preventDefault();
+    var tableconhecimento = document.getElementById('tconhecimentolist');
+    var linha = tableconhecimento.insertRow();
+    var cell = linha.insertCell();
+    var txtconhecimento = document.getElementById('selectconhecimento').selectedOptions[0].innerText;
+    cell.innerHTML = '' +txtconhecimento+ '<input type="hidden" name="conhecimento[]" value="'+txtconhecimento+'" >';
+  }
+};
+</script>

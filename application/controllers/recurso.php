@@ -26,7 +26,7 @@ class recurso extends MY_Controller {
 	}
 
 
-	public function form($rsc_id=0) 
+	public function form($rcs_id=0) 
 	{
 		$this->load->helper(array('form'));
     $this->load->library('form_validation');
@@ -42,10 +42,13 @@ class recurso extends MY_Controller {
 				if($resultValidation == TRUE)
 				{
 					// Obtém os dados inseridos
-					$dados['rsc_nome'] = trim($this->input->post('nome'));
-					$dados['rsc_descricao'] = trim($this->input->post('descricao'));
+					$dados['rcs_nome'] = trim($this->input->post('nome'));
+					$dados['rcs_telefone'] = trim($this->input->post('telefone'));
+					$dados['rcs_email'] = trim($this->input->post('email'));
+					//var_dump($this->input->post('conhecimento'));
+					//die('dados');
 					
-					if($rsc_id == 0)
+					if($rcs_id == 0)
 					{
 					// Cria um Novo 
 						$id_created = $this->recurso_model->insert($dados);
@@ -54,14 +57,14 @@ class recurso extends MY_Controller {
 					}
 					// Salva as alterações
 					else{
-						$this->recurso_model->update($dados, $rsc_id);
+						$this->recurso_model->update($dados, $rcs_id);
 						$this->notification = array('tipo'=>'sucesso', 'title'=>'Alterações Salvas!', 'msg'=>'As alterações foram salvas com sucesso!');
 					}
 				}
 			}
 
       	// Obtém os dados do recurso
-	    	$record = $rsc_id == 0 ? null : $this->recurso_model->get_by_cod($rsc_id); 
+	    	$record = $rcs_id == 0 ? null : $this->recurso_model->get_by_cod($rcs_id); 
 
 	  	// Caso clicou em Apagar
 			if(isset($_POST['delete']))
