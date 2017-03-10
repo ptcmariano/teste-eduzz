@@ -28,6 +28,12 @@ class recurso extends MY_Controller {
 
 	public function form($rcs_id=0) 
 	{
+	  	// Caso clicou em Apagar
+			if(isset($_POST['delete']))
+			{
+				$this->apagar($_POST['rcs_id']);
+			}
+		
 		$this->load->helper(array('form'));
     $this->load->library('form_validation');
     $this->form_validation->set_rules('nome', 'Nome', 'required');
@@ -63,26 +69,16 @@ class recurso extends MY_Controller {
 				}
 			}
 
-      	// Obtém os dados do recurso
-	    	$record = $rcs_id == 0 ? null : $this->recurso_model->get_by_cod($rcs_id); 
-
-	  	// Caso clicou em Apagar
-			if(isset($_POST['delete']))
-			{
-				$this->apagar($_POST['rcs_id']);
-			}
-
-
+     	// Obtém os dados do recurso
+			$record = $rcs_id == 0 ? null : $this->recurso_model->get_by_cod($rcs_id);
 	  	// Alimenta as variaveis para a exibição da página
 			$title = 'Novo recurso';
 			$subtitle = '';
 
-	    	if(!empty($record))
-	    	{
-	    		$title = $record->recursonome;
-	    	}	
-
-
+    	if(!empty($record))
+    	{
+				$title = 'Recurso: ' . $record->rcs_nome;
+    	}
 
 		$data = array(
 			'title' => $title,
@@ -93,7 +89,7 @@ class recurso extends MY_Controller {
 			'record' => $record,
 		);
 
-		$this->load->view('_layout', $data);		
+		$this->load->view('_layout', $data);
 	}
 }
 /* End of file welcome.php */

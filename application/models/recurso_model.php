@@ -32,4 +32,20 @@ class recurso_model extends MY_Model {
         $this->db->insert($this->table, $dados); 
         return $this->db->insert_id();
     }
+  
+    function get_by_cod($rcs_id)
+    {
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('rcs_id', $rcs_id);
+        $query = $this->db->get();
+        $result = $query->result();
+        return empty($result) ? null : $result[0];
+    }
+  
+    function update($update_values, $rcs_id)
+    {
+        $this->db->where('rcs_id', $rcs_id);
+        $this->db->update($this->table, $update_values); 
+    }
 }
