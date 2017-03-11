@@ -48,4 +48,9 @@ class recurso_model extends MY_Model {
         $this->db->where('rcs_id', $rcs_id);
         $this->db->update($this->table, $update_values); 
     }
+  
+    function delete($rcs_id)
+    {
+        $this->db->delete($this->table, array('rcs_id' => $rcs_id));
+    }
 }

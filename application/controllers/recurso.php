@@ -14,18 +14,22 @@ class recurso extends MY_Controller {
 
 	public function index()
 	{
+		if(isset($_POST['delete']))
+		{
+			$this->apagar($_POST['rcs_id']);
+		}
 		$recurso = $this->recurso_model->get_byfilter($this->input->get('nome'));
 
 		$data = array(
 			'page'=>'recurso/list',
 			'title'=>'recurso',
 			'subtitle'=>'Todos os recurso cadastrados no sistema',
+			'notification'=>$this->notification,
 			'recurso'=>$recurso
 		);
 
 		$this->load->view('_layout', $data);
 	}
-
 
 	public function form($rcs_id=0) 
 	{
@@ -52,8 +56,6 @@ class recurso extends MY_Controller {
 					$dados['rcs_nome'] = trim($this->input->post('nome'));
 					$dados['rcs_telefone'] = trim($this->input->post('telefone'));
 					$dados['rcs_email'] = trim($this->input->post('email'));
-					//var_dump($this->input->post('conhecimento'));
-					//die('dados');
 					
 					if($rcs_id == 0)
 					{
@@ -68,6 +70,7 @@ class recurso extends MY_Controller {
 					}
 					else{
 						// Salva as alterações
+						//todo: salvar alterações de conhecimento
 						$this->recurso_model->update($dados, $rcs_id);
 						$this->notification = array('tipo'=>'sucesso', 'title'=>'Alterações Salvas!', 'msg'=>'As alterações foram salvas com sucesso!');
 					}
@@ -76,7 +79,11 @@ class recurso extends MY_Controller {
 
      	// Obtém os dados do recurso
 			$record = $rcs_id == 0 ? null : $this->recurso_model->get_by_cod($rcs_id);
-			$conhecimento = $this->recursoconhecimento_model->get_byrcs_id($record->rcs_id);
+			$conhecimento = [];
+			if(is_object($record)){
+				$conhecimento = $this->recursoconhecimento_model->get_byrcs_id($record->rcs_id);
+			}
+
 			// Alimenta as variaveis para a exibição da página
 			$title = 'Novo recurso';
 			$subtitle = '';
@@ -97,6 +104,25 @@ class recurso extends MY_Controller {
 		);
 
 		$this->load->view('_layout', $data);
+	}
+	function apagar($rcs_id){
+			$_rec = $this->recurso_model->get_byfilter($rcs_id)[0];
+		if(empty($_rec)){
+				$this->notification = array('tipo'=>'atencao', 'title'=>'Exclusão cancelada!', 'msg'=>'para '.$_rec->rcs_nome);	
+				redirect(base_url().'recurso');
+		}
+	 	else{
+			$result_delete = $this->recurso_model->delete($rcs_id);
+			if(empty($result_delete)){
+				// Deletou com sucesso. Redireciona
+				$this->session->set_flashdata('msg', array('tipo'=>'sucesso','title'=>'', 'msg'=>'<b>'.$_rec->rcs_nome.'</b> foi apagado com sucesso!'));
+				redirect(base_url().'recurso');
+			}else{
+				// Ocorreu um erro ao deletar
+				$this->notification = array('tipo'=>'atencao', 'title'=>'Exclusão cancelada!', 'msg'=>$result_delete);	
+				redirect(base_url().'recurso');
+			}
+	 	}		
 	}
 }
 /* End of file welcome.php */

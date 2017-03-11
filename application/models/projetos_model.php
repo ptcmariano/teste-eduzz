@@ -74,7 +74,7 @@ class projetos_model extends MY_Model {
     function delete($prj_cod)
     {
         $this->db->delete('TProjetos', array('prj_cod' => $prj_cod));
-    } 
+    }
 
 
 }
