@@ -70,7 +70,12 @@ class recurso extends MY_Controller {
 					}
 					else{
 						// Salva as alterações
-						//todo: salvar alterações de conhecimento
+						$conhecimentos = $this->input->post('conhecimento');
+						if(!empty($conhecimentos)){
+							$this->recursoconhecimento_model->delete($rcs_id);
+							$inseridos = $this->recursoconhecimento_model->insert($rcs_id, $conhecimentos);
+						}
+
 						$this->recurso_model->update($dados, $rcs_id);
 						$this->notification = array('tipo'=>'sucesso', 'title'=>'Alterações Salvas!', 'msg'=>'As alterações foram salvas com sucesso!');
 					}

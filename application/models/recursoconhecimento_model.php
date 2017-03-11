@@ -35,4 +35,9 @@ class recursoconhecimento_model extends MY_Model {
         $query = $this->db->get();
         return $query->result();
     }
+  
+    function delete($rcs_id)
+    {
+        $this->db->delete($this->table, array('rcs_id' => $rcs_id));
+    }
 }
