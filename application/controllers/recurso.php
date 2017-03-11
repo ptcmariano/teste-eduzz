@@ -9,6 +9,7 @@ class recurso extends MY_Controller {
 		Autenticado();     
 
 		$this->load->model('recurso_model');
+		$this->load->model('recursoconhecimento_model');
 	}
 
 	public function index()
@@ -59,10 +60,14 @@ class recurso extends MY_Controller {
 					// Cria um Novo 
 						$id_created = $this->recurso_model->insert($dados);
 						$this->session->set_flashdata('msg', array('tipo'=>'sucesso', 'title'=>'Cadastrado com Sucesso!', 'msg'=>''));
-						redirect(base_url().'recurso/form/'.$id_created);					
+						$dados = $this->input->post('conhecimento');
+						if(!empty($dados)){
+							$inseridos = $this->recursoconhecimento_model->insert($id_created, $dados);
+						}
+						redirect(base_url().'recurso/form/'.$id_created);
 					}
-					// Salva as alterações
 					else{
+						// Salva as alterações
 						$this->recurso_model->update($dados, $rcs_id);
 						$this->notification = array('tipo'=>'sucesso', 'title'=>'Alterações Salvas!', 'msg'=>'As alterações foram salvas com sucesso!');
 					}
@@ -71,7 +76,8 @@ class recurso extends MY_Controller {
 
      	// Obtém os dados do recurso
 			$record = $rcs_id == 0 ? null : $this->recurso_model->get_by_cod($rcs_id);
-	  	// Alimenta as variaveis para a exibição da página
+			$conhecimento = $this->recursoconhecimento_model->get_byrcs_id($record->rcs_id);
+			// Alimenta as variaveis para a exibição da página
 			$title = 'Novo recurso';
 			$subtitle = '';
 
@@ -87,6 +93,7 @@ class recurso extends MY_Controller {
 			'mode' => !empty($record) ? 'alter' : 'new',
 			'notification'=>$this->notification,
 			'record' => $record,
+			'conhecimento' => $conhecimento
 		);
 
 		$this->load->view('_layout', $data);
